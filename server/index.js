@@ -43,6 +43,6 @@ wsServer.on('request', (request) => {
     });
 
     connection.on('close', (connection) => {
-        console.log(connection)
+        console.log("Closed:", connection)
     });
 })

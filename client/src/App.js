@@ -1,23 +1,28 @@
-import './App.css';
+import React, { Component } from 'react';
+import { w3cwebsocket as webSocket } from 'websocket'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const client = new webSocket("ws://localhost:80")
+
+class App extends Component {
+
+    componentWillMount() {
+        client.onopen = () => {
+            console.log("Websocket opened");
+        }
+
+        client.onmessage = (message) => {
+            console.log(message);
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
+
+            </div>
+
+        )
+    }
 }
 
 export default App;
