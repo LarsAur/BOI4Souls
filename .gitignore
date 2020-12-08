@@ -1,7 +1,9 @@
 client/node_modules
 client/package.json
 client/yarn.lock
+client/build
 
 server/node_modules
 server/package-lock.json
 server/package.json
+
