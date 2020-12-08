@@ -7,8 +7,13 @@ const PORT = 80;
 let server = http.createServer((req, res) => {
     console.log(new Date() + ' Received request for ' + req.url);
 
-    fs.readFile("../client/build" + endpoint, (err, data) => {
+    let endpoint = req.url;
+    if(endpoint.endsWith("/")) endpoint += "index.html"
+
+
+    fs.readFile("../client/build/" + endpoint, (err, data) => {
         if(err){
+            console.log("Error while responding to:", endpoint)
             res.writeHead(404);
             res.end(JSON.stringify(err));
             return;
@@ -17,6 +22,7 @@ let server = http.createServer((req, res) => {
         res.writeHead(200);
         res.end(data);
     })
+
 });
 
 server.listen(PORT, () => {
