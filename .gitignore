@@ -1,7 +1,16 @@
 client/node_modules
-client/package.json
-client/yarn.lock
+client/.pnp
+client/.pnp.js
+client/coverage
 client/build
+client/.DS_Store
+client/.env.local
+client/.env.development.local
+client/.env.test.local
+client/.env.production.local
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
 
 server/node_modules
 server/package-lock.json

@@ -1,6 +1,6 @@
-const WebSocketServer = require('websocket').server;
-const http = require('http');
-const fs = require('fs'); 
+import WebSocketServer, { IMessage } from 'websocket'
+import http from 'http'
+import fs from 'fs';
 
 const PORT = 80;
 
@@ -29,17 +29,15 @@ server.listen(PORT, () => {
     console.log("Listening on port", PORT)
 });
 
-wsServer = new WebSocketServer({
+let wsServer = new WebSocketServer.server({
     httpServer: server,
 })
 
 wsServer.on('request', (request) => {
     let connection = request.accept(null, request.origin);
 
-    connection.on('message', (message) => {
-        if(message.type === 'utf8'){
-
-        }
+    connection.on('message', (message:IMessage) => {
+        console.log(JSON.parse(message.utf8Data));
     });
 
     connection.on('close', (connection) => {
