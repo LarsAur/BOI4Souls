@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../../components/button/button';
+import Network from '../../utils/network';
 
 import classes from './loginScreen.module.css'
 
@@ -27,6 +28,7 @@ class LoginScreen extends Component<ILoginProps, ILoginState> {
 
     onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
+        Network.sendJoinRequest(this.state.name);
     }
 
     onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -23,18 +23,23 @@ export default class Network{
         connection.onclose = Network.onClose;
     }
 
-    static onOpen = () => {
-        console.log("Websocket opened and connected to:", webSocketAddress);
-        connection.send(JSON.stringify({data: 1}))
-
-        console.log(JSON.stringify({data: 1}))
+    static sendJoinRequest(username: string){
+        Network.send("request_join", {username: username})
     }
 
-    static onClose = (event: ICloseEvent) => {
+    private static send(action: string, data:any){
+        connection.send(JSON.stringify({action: action, data: data}));
+    }
+
+    private static onOpen = () => {
+        console.log("Websocket opened and connected to:", webSocketAddress);
+    }
+
+    private static onClose = (event: ICloseEvent) => {
         console.log("Websocket connection was closed: " + event.reason);
     }
 
-    static onMessage = (message: IMessageEvent) => {
+    private static onMessage = (message: IMessageEvent) => {
         console.log(message.data);
     }
 }
