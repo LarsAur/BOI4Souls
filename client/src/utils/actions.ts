@@ -1,6 +1,6 @@
-import { IAction, ActionType } from './redux';
+import { IAction, ActionType, NavState } from './redux';
 
-export const login = (username: string): IAction => ({
+export const joinLobby = (uid:number): IAction => ({
     type: ActionType.JOIN_LOBBY,
-    payload: username,
+    payload: {uid: uid, navState: NavState.LOBBY}
 });

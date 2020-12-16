@@ -1,8 +1,13 @@
-import WebSocketServer, { IMessage } from 'websocket'
+import { Server } from 'socket.io'
 import http from 'http'
 import fs from 'fs';
 
+import BOILobby from './lobby';
+
 const PORT = 80;
+
+let lobby = new BOILobby();
+let game;
 
 // Setup http server and the endpoints
 const server = http.createServer((req, res) => {
@@ -23,48 +28,31 @@ const server = http.createServer((req, res) => {
         res.writeHead(200);
         res.end(data);
     })
-
 });
+
+// Create socket.io server
+const io = new Server();
+// Setup listeners for socket.io connections
+io.on('connection', (socket) => {
+    socket.on("request_join", (username: string) => {
+        if (lobby.isSpace()) {
+            socket.join("lobby");
+            let uid:number = 0; // TODO
+            socket.emit("accept_join", uid);
+            socket.to("lobby").emit("joined", lobby.players)
+        }
+    });
+
+    socket.on("next_character", (uid: number) => {
+
+    });
+
+    socket.on("prev_character", (uid: number) => {
+
+    })
+})
 
 // Start http server on the port
 server.listen(PORT, () => {
     console.log("Listening on port", PORT)
 });
-
-// Create websocket server
-const wsServer = new WebSocketServer.server({
-    httpServer: server,
-})
-
-// Setup listeners for 
-wsServer.on('request', (request: WebSocketServer.request) => {
-    let connection = request.accept(null, request.origin);
-    connection.on('message', onMessage);
-    connection.on('close', onClose);
-})
-
-interface IMessageObject{
-    action: string
-    data: any
-}
-
-const onMessage = (message: IMessage) => {
-    const messageObj : IMessageObject = JSON.parse(message.utf8Data);
-
-    switch(messageObj.action){
-        case "request_join":
-            onJoinRequest(messageObj.data.username)
-            break;
-        default:
-            console.log("Uncaught message action:", messageObj)
-    }
-};
-
-const onJoinRequest = (username: string) => {
-    console.log(username, "requested to join")
-}
-
-const onClose = (connectionId: number) => {
-    console.log("Connection closed", connectionId);
-}
-

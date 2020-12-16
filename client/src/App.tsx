@@ -1,11 +1,12 @@
 import React from 'react';
 import LoginScreen from './screens/login/loginScreen';
 import Network from './utils/network';
+import store from './utils/redux';
 
 class App extends React.Component{
 
 	componentDidMount(){
-		Network.connect();
+		Network.setupNetwork(store);
 	}
 
 	render(){

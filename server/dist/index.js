@@ -3,10 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const websocket_1 = __importDefault(require("websocket"));
+const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
 const fs_1 = __importDefault(require("fs"));
+const lobby_1 = __importDefault(require("./lobby"));
 const PORT = 80;
+let lobby = new lobby_1.default();
+let game;
 // Setup http server and the endpoints
 const server = http_1.default.createServer((req, res) => {
     console.log(new Date() + ' Received request for ' + req.url);
@@ -24,34 +27,25 @@ const server = http_1.default.createServer((req, res) => {
         res.end(data);
     });
 });
+// Create socket.io server
+const io = new socket_io_1.Server();
+// Setup listeners for socket.io connections
+io.on('connection', (socket) => {
+    socket.on("request_join", (username) => {
+        if (lobby.isSpace()) {
+            socket.join("lobby");
+            let uid = 0; // TODO
+            socket.emit("set_uid", uid);
+            socket.to("lobby").emit("joined", lobby.players);
+        }
+    });
+    socket.on("next_character", (uid) => {
+    });
+    socket.on("prev_character", (uid) => {
+    });
+});
 // Start http server on the port
 server.listen(PORT, () => {
     console.log("Listening on port", PORT);
 });
-// Create websocket server
-const wsServer = new websocket_1.default.server({
-    httpServer: server,
-});
-// Setup listeners for 
-wsServer.on('request', (request) => {
-    let connection = request.accept(null, request.origin);
-    connection.on('message', onMessage);
-    connection.on('close', onClose);
-});
-const onMessage = (message) => {
-    const messageObj = JSON.parse(message.utf8Data);
-    switch (messageObj.action) {
-        case "request_join":
-            onJoinRequest(messageObj.data.username);
-            break;
-        default:
-            console.log("Uncaught message action:", messageObj);
-    }
-};
-const onJoinRequest = (username) => {
-    console.log(username, "requested to join");
-};
-const onClose = (connectionId) => {
-    console.log("Connection closed", connectionId);
-};
 //# sourceMappingURL=index.js.map

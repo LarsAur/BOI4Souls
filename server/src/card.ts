@@ -1,71 +1,77 @@
+export enum CARD_TYPE {
+    LOOT,
+    TREASURE,
+    ETERNAL,
+    PLAYER,
+}    
+
+interface ICardData {
+    name: string
+    type: CARD_TYPE
+    urlResName: string
+}    
+
+export const NUMBER_OF_PLAYER_CARDS = 11;
+export const getCard = (id: number) : Card => {
+    if(id < 0 || id >= cardData.length) return null;
+    return cards[id];
+}
+
+export const getEternalCardIdFromCharacterId = (id: number): number => {
+    if(id < 0 || id >= NUMBER_OF_PLAYER_CARDS) return;
+    return id + NUMBER_OF_PLAYER_CARDS
+}
+
+const BASE_IMAGE_URL = "https://pop-life.com/foursouls/data/cards/"
+const cardData: ICardData[] = [
+    // Player cards
+    { name: "Isaac", type: CARD_TYPE.PLAYER, urlResName: "001Isaac.png" },
+    { name: "Cain", type: CARD_TYPE.PLAYER, urlResName: "002Cain.png" },
+    { name: "Maggy", type: CARD_TYPE.PLAYER, urlResName: "003Maggy.png" },
+    { name: "Judas", type: CARD_TYPE.PLAYER, urlResName: "004Judas.png" },
+    { name: "Samson", type: CARD_TYPE.PLAYER, urlResName: "005Samson.png" },
+    { name: "Eve", type: CARD_TYPE.PLAYER, urlResName: "006Eve.png" },
+    { name: "Lilith", type: CARD_TYPE.PLAYER, urlResName: "007Lilith.png" },
+    { name: "Blue Baby", type: CARD_TYPE.PLAYER, urlResName: "008BlueBaby.png" },
+    { name: "Lazarus", type: CARD_TYPE.PLAYER, urlResName: "009Lazarus.png" },
+    { name: "The Forgotten", type: CARD_TYPE.PLAYER, urlResName: "010TheForgotten.png" },
+    { name: "Eden", type: CARD_TYPE.PLAYER, urlResName: "011Eden.png" },
+    // Eternal Cards
+    { name: "D6", type: CARD_TYPE.ETERNAL, urlResName: "001D6.png" },
+    { name: "Sleight of Hand", type: CARD_TYPE.ETERNAL, urlResName: "002SleightofHand.png" },
+    { name: "YumHeart", type: CARD_TYPE.ETERNAL, urlResName: "003YumHeart.png" },
+    { name: "Book of Belial", type: CARD_TYPE.ETERNAL, urlResName: "004BookofBelial.png" },
+    { name: "Bloor Lust", type: CARD_TYPE.ETERNAL, urlResName: "005BlootLust.png" },
+    { name: "The Curse", type: CARD_TYPE.ETERNAL, urlResName: "006TheCurse.png" },
+    { name: "Incubus", type: CARD_TYPE.ETERNAL, urlResName: "007Incubus.png" },
+    { name: "Forever Alone", type: CARD_TYPE.ETERNAL, urlResName: "008ForeverAlone.png" },
+    { name: "Lazarus Rag", type: CARD_TYPE.ETERNAL, urlResName: "009LazarusRag.png" },
+    { name: "The Bone", type: CARD_TYPE.ETERNAL, urlResName: "010TheBone.png" },
+    // Treasure Cards
+]
+
+
 export class Card {
-
-    static nextCardId = 0;
-
-    imageURL: string
+    
     cardId: number
-
-    constructor(imageURL: string) {
-        this.imageURL = imageURL;
-        this.cardId = Card.nextCardId;
-        Card.nextCardId++;
+    name: string
+    type: CARD_TYPE
+    imageURL: string
+    turned: boolean
+    
+    // Id corresponds to the index in the cards list
+    constructor(id: number, cardData:ICardData) {
+        this.cardId = id;
+        this.name = cardData.name;
+        this.imageURL = BASE_IMAGE_URL + cardData.urlResName;
+        this.type = cardData.type;
+        this.turned = false;
     }
-
-}
-
-export class LootCard extends Card {
-    constructor(imageURL: string) {
-        super(imageURL);
+    
+    flip(){
+        this.turned = !this.turned
     }
-}
+    
+}        
 
-export class TreasureCard extends Card {
-    constructor(imageURL: string) {
-        super(imageURL);
-    }
-}
-
-export class EternalCard extends Card {
-    constructor(imageURL: string) {
-        super(imageURL);
-    }
-}
-
-export class PlayerCard extends Card {
-
-    eternalCard: EternalCard
-
-    constructor(imageURL: string, eternalCard: EternalCard) {
-        super(imageURL);
-        this.eternalCard = eternalCard;
-    }
-
-}
-
-export const eternalCards = [
-    new EternalCard("https://pop-life.com/foursouls/data/cards/008ForeverAlone(3).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/002SleightofHand(3).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/006TheCurse(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/001D6(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/004BookofBelial(3).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/009LazarusRags(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/007Incubus(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/003YumHeart(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/005BloodLust(4).png"),
-    new EternalCard("https://pop-life.com/foursouls/data/cards/010TheBone(3).png"),
-
-]
-
-export const playerCards = [
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/008BlueBaby(1).png", eternalCards[0]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/002Cain(1).png", eternalCards[1]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/006Eve(1).png", eternalCards[2]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/001Isaac(1).png", eternalCards[3]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/004Judas(1).png", eternalCards[4]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/009Lazarus(2).png", eternalCards[5]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/007Lilith(1).png", eternalCards[6]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/003Maggy(2).png", eternalCards[7]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/005Samson(1).png", eternalCards[8]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/010TheForgotten(3).png", eternalCards[9]),
-    new PlayerCard("https://pop-life.com/foursouls/data/cards/011Eden(1).png", null),
-]
+const cards: Card[] = cardData.map((cardData: ICardData, index:number) => new Card(index, cardData))

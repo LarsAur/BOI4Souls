@@ -1,5 +1,4 @@
 import {createStore} from 'redux';
-import {login} from './actions';
 
 export enum NavState{
     LOGIN,
@@ -19,10 +18,10 @@ export interface IAction{
     payload: any,
 }
 
-interface IState{
+export interface IState{
     navState: NavState
     username: string
-    userId: number
+    uid: number
     usernames: string[]
     userIds: number[]
 }
@@ -30,7 +29,7 @@ interface IState{
 const initialState = {
     navState: NavState.LOGIN,
     username: "",
-    userId: 0,
+    uid: 0,
     usernames: [],
     userIds: [],
 
@@ -38,16 +37,11 @@ const initialState = {
 
 const reducer = (state:IState = initialState, action: IAction): IState => {
     switch(action.type) {
-        case ActionType.SET_NAME:
-            state = {
-                ...state,
-                username: action.payload
-            };
-            break;
         case ActionType.JOIN_LOBBY:
             state = {
                 ...state,
-                navState: NavState.LOBBY,
+                uid: action.payload.uid,
+                navState: action.payload.navState,
             }
             break;
         default:

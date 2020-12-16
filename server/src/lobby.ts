@@ -1,8 +1,9 @@
-import { PlayerCard, playerCards } from './card';
+import {NUMBER_OF_PLAYER_CARDS} from './card'; 
 
 interface IPlayer {
     username: string
     uid: number
+
     characterIndex: number
 }
 
@@ -26,8 +27,6 @@ export default class BOILobby {
             characterIndex: -1,
         });
 
-        this.getNextAvailableCharacterIndex(uid);
-
         return uid;
     }
 
@@ -35,16 +34,16 @@ export default class BOILobby {
         return this.players.find((player:IPlayer) => player.uid)
     }
 
-    isSpace(): boolean {
-        return this.players.length < 4;
+    incrementPlayerCharacter(uid:number){
+        let player = this.getPlayer(uid);
+        if(!player) return;
+        player.characterIndex = (player.characterIndex + 1) % NUMBER_OF_PLAYER_CARDS;
+        while(this.players.find((_player:IPlayer) => _player.characterIndex == player.characterIndex )){
+            player.characterIndex = (player.characterIndex + 1) % NUMBER_OF_PLAYER_CARDS;
+        }
     }
 
-    getNextAvailableCharacterIndex(uid:number): number {
-        const player = this.getPlayer(uid);
-        player.characterIndex = (player.characterIndex + 1) % playerCards.length;
-        while(this.players.find((_player:IPlayer) => _player.characterIndex == player.characterIndex && _player.uid != player.uid)){
-            player.characterIndex = (player.characterIndex + 1) % playerCards.length;
-        }
-        return player.characterIndex;
+    isSpace(): boolean {
+        return this.players.length < 4;
     }
 } 
