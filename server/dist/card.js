@@ -8,7 +8,7 @@ var CARD_TYPE;
     CARD_TYPE[CARD_TYPE["ETERNAL"] = 2] = "ETERNAL";
     CARD_TYPE[CARD_TYPE["PLAYER"] = 3] = "PLAYER";
 })(CARD_TYPE = exports.CARD_TYPE || (exports.CARD_TYPE = {}));
-exports.NUMBER_OF_PLAYER_CARDS = 11;
+exports.NUMBER_OF_PLAYER_CARDS = 10; // EDEN IS 11
 const getCard = (id) => {
     if (id < 0 || id >= cardData.length)
         return null;
@@ -34,7 +34,7 @@ const cardData = [
     { name: "Blue Baby", type: CARD_TYPE.PLAYER, urlResName: "008BlueBaby.png" },
     { name: "Lazarus", type: CARD_TYPE.PLAYER, urlResName: "009Lazarus.png" },
     { name: "The Forgotten", type: CARD_TYPE.PLAYER, urlResName: "010TheForgotten.png" },
-    { name: "Eden", type: CARD_TYPE.PLAYER, urlResName: "011Eden.png" },
+    //{ name: "Eden", type: CARD_TYPE.PLAYER, urlResName: "011Eden.png" },
     // Eternal Cards
     { name: "D6", type: CARD_TYPE.ETERNAL, urlResName: "001D6.png" },
     { name: "Sleight of Hand", type: CARD_TYPE.ETERNAL, urlResName: "002SleightofHand.png" },

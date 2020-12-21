@@ -1,47 +1,47 @@
-import {createStore} from 'redux';
+import { createStore } from 'redux';
+import { ActionType, IAction } from './actions';
 
-export enum NavState{
+export enum NavState {
     LOGIN,
     LOBBY,
     GAME,
 }
 
-export enum ActionType{
-    SET_NAME,
-    JOIN_LOBBY,
-    START_GAME,
-    SET_USERNAME,
-}
-
-export interface IAction{
-    type: ActionType,
-    payload: any,
-}
-
-export interface IState{
-    navState: NavState
-    username: string
+export interface IPlayer {
     uid: number
-    usernames: string[]
-    userIds: number[]
+    username: string
+    characterIndex: number
+
+    hand: any[] // TODO
+}
+
+export interface IState {
+    navState: NavState
+
+    uid: number
+    players: IPlayer[]
 }
 
 const initialState = {
     navState: NavState.LOGIN,
-    username: "",
-    uid: 0,
-    usernames: [],
-    userIds: [],
 
+    uid: 0,
+    players: [],
 } as IState
 
-const reducer = (state:IState = initialState, action: IAction): IState => {
-    switch(action.type) {
+const reducer = (state: IState = initialState, action: IAction): IState => {
+    switch (action.type) {
         case ActionType.JOIN_LOBBY:
             state = {
                 ...state,
-                uid: action.payload.uid,
-                navState: action.payload.navState,
+                uid: action.payload,
+                navState: NavState.LOBBY,
+            }
+            break;
+        case ActionType.SET_PLAYERS:
+            state = {
+                ...state,
+                players: action.payload,
             }
             break;
         default:
@@ -51,5 +51,4 @@ const reducer = (state:IState = initialState, action: IAction): IState => {
 }
 
 
-const store = createStore(reducer);
-export default store;
+export const store = createStore(reducer);

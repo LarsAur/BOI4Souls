@@ -10,9 +10,12 @@ const lobby_1 = __importDefault(require("./lobby"));
 const PORT = 80;
 let lobby = new lobby_1.default();
 let game;
+let socketToUid = new Map();
 // Setup http server and the endpoints
 const server = http_1.default.createServer((req, res) => {
     console.log(new Date() + ' Received request for ' + req.url);
+    if (req.url.startsWith("/socket.io"))
+        return;
     let endpoint = req.url;
     if (endpoint.endsWith("/"))
         endpoint += "index.html";
@@ -28,20 +31,47 @@ const server = http_1.default.createServer((req, res) => {
     });
 });
 // Create socket.io server
-const io = new socket_io_1.Server();
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
 // Setup listeners for socket.io connections
 io.on('connection', (socket) => {
+    console.log("Connected...");
     socket.on("request_join", (username) => {
+        console.log(lobby.isSpace());
         if (lobby.isSpace()) {
             socket.join("lobby");
-            let uid = 0; // TODO
-            socket.emit("set_uid", uid);
-            socket.to("lobby").emit("joined", lobby.players);
+            let uid = lobby.addPlayer(username);
+            socketToUid.set(socket, uid);
+            socket.emit("accept_join", uid);
+            // Send to all members of the lobby
+            io.to("lobby").emit("update_lobby", lobby.getPlayers());
         }
     });
     socket.on("next_character", (uid) => {
+        lobby.incrementPlayerCharacter(uid);
+        io.to("lobby").emit("update_lobby", lobby.getPlayers());
     });
     socket.on("prev_character", (uid) => {
+        lobby.decrementPlayerCharacter(uid);
+        io.to("lobby").emit("update_lobby", lobby.getPlayers());
+    });
+    socket.on("start_game_request", () => {
+        console.log("Game start request");
+        io.to("lobby").emit("start_game");
+    });
+    socket.on("disconnect", (reason) => {
+        let uid = socketToUid.get(socket);
+        if (uid !== undefined) {
+            console.log(lobby.getPlayer(uid).username, "left...");
+            console.log("Lobby:", lobby.getPlayers());
+            lobby.removePlayer(uid);
+            io.to("lobby").emit("update_lobby", lobby.getPlayers());
+        }
     });
 });
 // Start http server on the port

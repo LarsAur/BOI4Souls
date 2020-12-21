@@ -1,10 +1,10 @@
 .loginContainer{
-    height: 100vh;
+    height: 70vh;
+    width: 100vw;
     background-image: url("../../assets/wallpaper.png");
     background-size: cover;
     background-position: center;
     background-repeat: repeat-y;
-
     padding-top: 30vh;
 }
 

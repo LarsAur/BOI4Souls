@@ -1,0 +1,29 @@
+.lobbyContainer{
+    height: 100vh;
+    background-image: url("../../assets/wallpaper.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+}
+
+.slots{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    padding-top: 100px;
+}
+
+.empty{
+    background-color: darkslategray;
+    width: 300px;
+    height: 750px;
+    margin: 20px;
+    border-radius: 5px;
+}
+
+.playButtonContainer{
+    display: flex;
+    justify-content: center;
+}

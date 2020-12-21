@@ -1,21 +1,31 @@
 import React from 'react';
 import LoginScreen from './screens/login/loginScreen';
 import Network from './utils/network';
-import store from './utils/redux';
+import { connect } from 'react-redux';
+import { IState, NavState, store } from './utils/redux';
+import LobbyScreen from './screens/lobby/lobbyScreen';
+import './index.css'
 
-class App extends React.Component{
+class App extends React.Component {
 
-	componentDidMount(){
+	componentDidMount() {
 		Network.setupNetwork(store);
 	}
 
-	render(){
-		return (
-			<div className="App">
-				<LoginScreen />
-			</div>
-		);
+	render() {
+		switch (store.getState().navState) {
+			case NavState.GAME:
+				return;
+			case NavState.LOBBY:
+				return <LobbyScreen />;
+			case NavState.LOGIN:
+				return <LoginScreen />
+		}
 	}
 }
-
-export default App;
+const mapStateToProps = (state: IState) => {
+	return {
+		navstate: state.navState
+	};
+}
+export default connect(mapStateToProps)(App);

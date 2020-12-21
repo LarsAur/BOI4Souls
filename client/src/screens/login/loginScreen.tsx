@@ -28,7 +28,7 @@ class LoginScreen extends Component<ILoginProps, ILoginState> {
 
     onSubmitHandler = (event: React.FormEvent) => {
         event.preventDefault();
-        Network.sendJoinRequest(this.state.name);
+        Network.requestJoinLobby(this.state.name);
     }
 
     onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +38,6 @@ class LoginScreen extends Component<ILoginProps, ILoginState> {
     render() {
         return (
             <div className={classes.loginContainer}>
-
                 <form className={classes.loginCenter} onSubmit={this.onSubmitHandler} autoComplete="off">
                     <input type="text" placeholder="Name" onChange={this.onNameChange} required autoComplete="off"></input>
                     <Button type="submit">Join Lobby</Button>

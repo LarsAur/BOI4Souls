@@ -1,0 +1,17 @@
+.container{
+    background-color: aliceblue;
+    width: 300px;
+    height: 800px;
+
+
+    font-size: 30px;
+    text-align: center;
+    user-select: none;
+
+    margin: 20px;
+    border-radius: 5px;
+}
+
+.playerCard{
+    width: 250px;
+}

@@ -1,9 +1,9 @@
 import { io, Socket } from 'socket.io-client';
-import { IState, IAction } from './redux';
+import { IState, IPlayer } from './redux';
+import { IAction, joinLobby, setPlayers } from './actions';
 import { Store } from 'redux';
-import { joinLobby } from './actions';
 
-const ioAddress = "http://localhost:80";
+const ioAddress = "ws://localhost:80";
 
 export default class Network {
 
@@ -12,14 +12,34 @@ export default class Network {
 
     static setupNetwork(store: Store<IState, IAction>) {
         // Connect to websocket
-        this.socket = io(ioAddress);
-
-        this.socket.on("accept_join", (uid: number) => {
-            store.dispatch(joinLobby(uid));
-        })
+        Network.socket = io(ioAddress);
+        Network.store = store;
     }
 
     static requestJoinLobby(username: string) {
-        this.socket.emit("request_join", username);
+        Network.socket.emit("request_join", username);
+
+        Network.socket.once("accept_join", (uid: number) => {
+            Network.store.dispatch(joinLobby(uid));
+        });
+
+        Network.socket.on("update_lobby", (players: IPlayer[]) => {
+            Network.store.dispatch(setPlayers(players))
+            console.log(Network.store.getState().players[0].characterIndex)
+        });
+    }
+
+    static nextCharacter(){
+        console.log(Network.store.getState().players[0].characterIndex)
+        Network.socket.emit("next_character", Network.store.getState().uid);
+    }
+    
+    static prevCharacter(){
+        console.log(Network.store.getState().players[0].characterIndex)
+        Network.socket.emit("prev_character", Network.store.getState().uid);
+    }
+
+    static startGame(){
+        Network.socket.emit("start_game_request");
     }
 }

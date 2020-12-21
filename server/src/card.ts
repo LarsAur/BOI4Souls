@@ -11,7 +11,7 @@ interface ICardData {
     urlResName: string
 }    
 
-export const NUMBER_OF_PLAYER_CARDS = 11;
+export const NUMBER_OF_PLAYER_CARDS = 10; // EDEN IS 11
 export const getCard = (id: number) : Card => {
     if(id < 0 || id >= cardData.length) return null;
     return cards[id];
@@ -35,7 +35,7 @@ const cardData: ICardData[] = [
     { name: "Blue Baby", type: CARD_TYPE.PLAYER, urlResName: "008BlueBaby.png" },
     { name: "Lazarus", type: CARD_TYPE.PLAYER, urlResName: "009Lazarus.png" },
     { name: "The Forgotten", type: CARD_TYPE.PLAYER, urlResName: "010TheForgotten.png" },
-    { name: "Eden", type: CARD_TYPE.PLAYER, urlResName: "011Eden.png" },
+    //{ name: "Eden", type: CARD_TYPE.PLAYER, urlResName: "011Eden.png" },
     // Eternal Cards
     { name: "D6", type: CARD_TYPE.ETERNAL, urlResName: "001D6.png" },
     { name: "Sleight of Hand", type: CARD_TYPE.ETERNAL, urlResName: "002SleightofHand.png" },
@@ -52,7 +52,6 @@ const cardData: ICardData[] = [
 
 
 export class Card {
-    
     cardId: number
     name: string
     type: CARD_TYPE
