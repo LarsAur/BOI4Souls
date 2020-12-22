@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import { createStore } from 'redux';
 import { ActionType, IAction } from './actions';
 
@@ -42,6 +43,12 @@ const reducer = (state: IState = initialState, action: IAction): IState => {
             state = {
                 ...state,
                 players: action.payload,
+            }
+            break;
+        case ActionType.START_GAME:
+            state = {
+                ...state,
+                navState: NavState.GAME,
             }
             break;
         default:

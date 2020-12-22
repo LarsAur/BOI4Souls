@@ -1,0 +1,68 @@
+.container{
+    height: 100vh;
+    background-image: url("../../assets/board.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+
+
+    display: grid;
+    grid-template-columns: 42.5% 5% 5% 5% 42.5%;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+    grid-template-areas: 
+        "p1h p1h p2h p2h"
+        "p1f p1f p2f p2f"
+        "tc lc lc dice mc"
+        "p3f p3f p4f p4f"
+        "p3h p3h p4h p4h"
+
+}
+
+.dice{
+    grid-area: "dice";
+}
+
+.lootCards{
+    grid-area: "lc";
+}
+
+.treasureCards{
+    grid-area: "tc";
+}
+
+.monsterCards{
+    grid-area: "mc";
+}
+
+.player1Hand{
+    grid-area: "p1h";
+}
+
+.player2Hand{
+    grid-area: "p2h";
+    
+}
+
+.player3Hand{
+    grid-area: "p3h";
+}
+
+.player4Hand{
+    grid-area: "p4h";
+}
+
+.player1Field{
+    grid-area: "p1f";
+}
+
+.player2Field{
+    grid-area: "p2f";
+}
+
+.player3Field{
+    grid-area: "p3f";
+}
+
+.player4Field{
+    grid-area: "p4f";
+}

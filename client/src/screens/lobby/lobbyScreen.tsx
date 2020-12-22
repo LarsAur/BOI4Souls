@@ -30,7 +30,7 @@ class LobbyScreen extends React.Component<ILobbyProps, ILobbyState>{
                 </div>
 
                 {/* Display the play button if the player is the least reasently joined player */}
-                {Math.min(...store.getState().players.map((player: IPlayer) => player.uid)) == store.getState().uid ? <div className={classes.playButtonContainer}><Button clicked={() => Network.startGame()}>Play!</Button></div> : null}
+                {Math.min(...store.getState().players.map((player: IPlayer) => player.uid)) == store.getState().uid ? <div className={classes.playButtonContainer}><Button clicked={() => Network.sendStartGameRequest()}>Play!</Button></div> : null}
             </div>
         );
     }

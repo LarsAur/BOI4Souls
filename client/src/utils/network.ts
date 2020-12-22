@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { IState, IPlayer } from './redux';
-import { IAction, joinLobby, setPlayers } from './actions';
+import { IAction, joinLobby, setPlayers, startGame} from './actions';
 import { Store } from 'redux';
 
 const ioAddress = "ws://localhost:80";
@@ -23,9 +23,14 @@ export default class Network {
             Network.store.dispatch(joinLobby(uid));
         });
 
+        /*******These can only be triggered once in the lobby*******/
         Network.socket.on("update_lobby", (players: IPlayer[]) => {
             Network.store.dispatch(setPlayers(players))
             console.log(Network.store.getState().players[0].characterIndex)
+        });
+
+        Network.socket.on("start_game", () => {
+            Network.store.dispatch(startGame());
         });
     }
 
@@ -39,7 +44,7 @@ export default class Network {
         Network.socket.emit("prev_character", Network.store.getState().uid);
     }
 
-    static startGame(){
+    static sendStartGameRequest(){
         Network.socket.emit("start_game_request");
     }
 }

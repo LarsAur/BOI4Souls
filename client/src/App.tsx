@@ -1,9 +1,10 @@
 import React from 'react';
 import LoginScreen from './screens/login/loginScreen';
+import LobbyScreen from './screens/lobby/lobbyScreen';
+import GameScreen from './screens/game/gameScreen';
 import Network from './utils/network';
 import { connect } from 'react-redux';
 import { IState, NavState, store } from './utils/redux';
-import LobbyScreen from './screens/lobby/lobbyScreen';
 import './index.css'
 
 class App extends React.Component {
@@ -15,7 +16,7 @@ class App extends React.Component {
 	render() {
 		switch (store.getState().navState) {
 			case NavState.GAME:
-				return;
+				return <GameScreen />;
 			case NavState.LOBBY:
 				return <LobbyScreen />;
 			case NavState.LOGIN:
