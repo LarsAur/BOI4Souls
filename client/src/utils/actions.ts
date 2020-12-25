@@ -4,6 +4,7 @@ export enum ActionType{
     JOIN_LOBBY,
     SET_PLAYERS,
     START_GAME,
+    ROLL_DICE,
 }
 
 export interface IAction {
@@ -25,3 +26,8 @@ export const startGame = ():IAction => ({
     type: ActionType.START_GAME,
     payload: null
 });
+
+export const rollDice = (value:number):IAction => ({
+    type: ActionType.ROLL_DICE,
+    payload: value
+})

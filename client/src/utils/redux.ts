@@ -21,6 +21,8 @@ export interface IState {
 
     uid: number
     players: IPlayer[]
+    diceValue: number
+    rollToggle: boolean // Used to notify the dice for when it is rolled
 }
 
 const initialState = {
@@ -28,6 +30,9 @@ const initialState = {
 
     uid: 0,
     players: [],
+
+    diceValue: 1,
+    rollToggle: false
 } as IState
 
 const reducer = (state: IState = initialState, action: IAction): IState => {
@@ -49,6 +54,13 @@ const reducer = (state: IState = initialState, action: IAction): IState => {
             state = {
                 ...state,
                 navState: NavState.GAME,
+            }
+            break;
+        case ActionType.ROLL_DICE:
+            state = {
+                ...state,
+                diceValue: action.payload,
+                rollToggle: !state.rollToggle
             }
             break;
         default:

@@ -75,6 +75,16 @@ io.on('connection', (socket: Socket) => {
         io.to("lobby").emit("start_game");
     })
 
+    socket.on("roll_dice_request", () => {
+        let value = Math.ceil(Math.random()*6);
+        while(value === 0){
+            value = Math.ceil(Math.random()*6);
+        }
+        
+        console.log("Dice rolled:", value);
+        io.to("lobby").emit("roll_dice", value);
+    })
+
     socket.on("disconnect", (reason) => {
         let uid = socketToUid.get(socket);
         if (uid !== undefined) {

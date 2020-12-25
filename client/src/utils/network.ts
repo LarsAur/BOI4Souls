@@ -1,7 +1,8 @@
 import { io, Socket } from 'socket.io-client';
 import { IState, IPlayer } from './redux';
-import { IAction, joinLobby, setPlayers, startGame} from './actions';
+import { IAction, joinLobby, setPlayers, startGame, rollDice} from './actions';
 import { Store } from 'redux';
+import AudioManager from './audioManager';
 
 const ioAddress = "ws://localhost:80";
 
@@ -32,6 +33,13 @@ export default class Network {
         Network.socket.on("start_game", () => {
             Network.store.dispatch(startGame());
         });
+
+        /******These can only be triggered once in game *********/
+        Network.socket.on("roll_dice", (value: number) => {
+            Network.store.dispatch(rollDice(value));
+            AudioManager.stop("dice");
+            AudioManager.play("dice");
+        })
     }
 
     static nextCharacter(){
@@ -46,5 +54,9 @@ export default class Network {
 
     static sendStartGameRequest(){
         Network.socket.emit("start_game_request");
+    }
+
+    static rollDice(){
+        Network.socket.emit("roll_dice_request");
     }
 }
