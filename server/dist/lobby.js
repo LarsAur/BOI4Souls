@@ -12,7 +12,9 @@ class BOILobby {
             username: username,
             uid: uid,
             characterIndex: -1,
-            hand: []
+            coins: 3,
+            hand: [],
+            field: [],
         });
         this.incrementPlayerCharacter(uid); // Set character to the first available character
         console.log(username, "was added to lobby. CharacterIndex:", this.getPlayer(uid).characterIndex);

@@ -3,6 +3,7 @@ import http from 'http'
 import fs from 'fs';
 
 import BOILobby from './lobby';
+import BOIGame, { IGameData } from './game';
 
 const PORT = 80;
 
@@ -71,8 +72,13 @@ io.on('connection', (socket: Socket) => {
     });
 
     socket.on("start_game_request", () => {
-        console.log("Game start request")
-        io.to("lobby").emit("start_game");
+        console.log("Game start request");
+
+        game = new BOIGame(lobby.players);
+
+        console.log(game.getGameData())
+
+        io.to("lobby").emit("start_game", game.getGameData());
     })
 
     socket.on("roll_dice_request", () => {
@@ -83,6 +89,10 @@ io.on('connection', (socket: Socket) => {
         
         console.log("Dice rolled:", value);
         io.to("lobby").emit("roll_dice", value);
+    })
+
+    socket.on("new_game_data_request", (gameData:IGameData) => {
+        io.to("lobby").emit("new_game_data", gameData)
     })
 
     socket.on("disconnect", (reason) => {

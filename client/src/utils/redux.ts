@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import { createStore } from 'redux';
 import { ActionType, IAction } from './actions';
 
@@ -9,11 +8,22 @@ export enum NavState {
 }
 
 export interface IPlayer {
-    uid: number
     username: string
-    characterIndex: number
+    uid: number
 
-    hand: any[] // TODO
+    characterIndex: number
+    coins: number
+    hand: number[] // Ids of the cards in the hand
+    field: number[] // Ids of the card in the field
+}
+
+export interface IGameData{
+    players: IPlayer[];
+
+    monsterDeck : number[];
+    lootDeck : number[];
+    treasureDeck: number[];
+    bonusSoulsDeck: number[];
 }
 
 export interface IState {
@@ -21,6 +31,7 @@ export interface IState {
 
     uid: number
     players: IPlayer[]
+    gameData: IGameData
     diceValue: number
     rollToggle: boolean // Used to notify the dice for when it is rolled
 }
@@ -30,9 +41,10 @@ const initialState = {
 
     uid: 0,
     players: [],
+    gameData: {} as IGameData,
 
     diceValue: 1,
-    rollToggle: false
+    rollToggle: false,
 } as IState
 
 const reducer = (state: IState = initialState, action: IAction): IState => {
@@ -54,6 +66,8 @@ const reducer = (state: IState = initialState, action: IAction): IState => {
             state = {
                 ...state,
                 navState: NavState.GAME,
+                players: (action.payload as IGameData).players,
+                gameData: (action.payload as IGameData)
             }
             break;
         case ActionType.ROLL_DICE:
@@ -61,6 +75,13 @@ const reducer = (state: IState = initialState, action: IAction): IState => {
                 ...state,
                 diceValue: action.payload,
                 rollToggle: !state.rollToggle
+            }
+            break;
+        case ActionType.SET_GAME_DATA:
+            state = {
+                ...state,
+                gameData: action.payload,
+                players: action.payload.players,
             }
             break;
         default:

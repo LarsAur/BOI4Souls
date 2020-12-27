@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
-import { IState, IPlayer } from './redux';
-import { IAction, joinLobby, setPlayers, startGame, rollDice} from './actions';
+import { IState, IPlayer, IGameData } from './redux';
+import { IAction, joinLobby, setPlayers, startGame, rollDice, setGameData } from './actions';
 import { Store } from 'redux';
 import AudioManager from './audioManager';
 
@@ -30,8 +30,9 @@ export default class Network {
             console.log(Network.store.getState().players[0].characterIndex)
         });
 
-        Network.socket.on("start_game", () => {
-            Network.store.dispatch(startGame());
+        Network.socket.on("start_game", (gameData: IGameData) => {
+            Network.store.dispatch(startGame(gameData));
+            console.log(gameData)
         });
 
         /******These can only be triggered once in game *********/
@@ -40,23 +41,30 @@ export default class Network {
             AudioManager.stop("dice");
             AudioManager.play("dice");
         })
+
+        Network.socket.on("new_game_data", (gameData:IGameData) => {
+            console.log("got new game data")
+            Network.store.dispatch(setGameData(gameData));
+        })
     }
 
-    static nextCharacter(){
-        console.log(Network.store.getState().players[0].characterIndex)
+    static nextCharacter() {
         Network.socket.emit("next_character", Network.store.getState().uid);
     }
-    
-    static prevCharacter(){
-        console.log(Network.store.getState().players[0].characterIndex)
+
+    static prevCharacter() {
         Network.socket.emit("prev_character", Network.store.getState().uid);
     }
 
-    static sendStartGameRequest(){
+    static sendStartGameRequest() {
         Network.socket.emit("start_game_request");
     }
 
-    static rollDice(){
+    static rollDice() {
         Network.socket.emit("roll_dice_request");
+    }
+
+    static sendNewGameData(gameData:IGameData){
+        Network.socket.emit("new_game_data_request", gameData)
     }
 }

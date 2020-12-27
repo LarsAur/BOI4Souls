@@ -18,10 +18,6 @@ interface IPlayerDisplayState {
 
 export default class PlayerDisplay extends React.Component<IPlayerDisplayProps, IPlayerDisplayState> {
 
-    constructor(props: IPlayerDisplayProps) {
-        super(props);
-    }
-
     render() {
         return (
             <div className={classes.container}>

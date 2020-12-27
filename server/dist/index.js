@@ -7,6 +7,7 @@ const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
 const fs_1 = __importDefault(require("fs"));
 const lobby_1 = __importDefault(require("./lobby"));
+const game_1 = __importDefault(require("./game"));
 const PORT = 80;
 let lobby = new lobby_1.default();
 let game;
@@ -62,7 +63,9 @@ io.on('connection', (socket) => {
     });
     socket.on("start_game_request", () => {
         console.log("Game start request");
-        io.to("lobby").emit("start_game");
+        game = new game_1.default(lobby.players);
+        console.log(game.getGameData());
+        io.to("lobby").emit("start_game", game.getGameData());
     });
     socket.on("roll_dice_request", () => {
         let value = Math.ceil(Math.random() * 6);
@@ -71,6 +74,9 @@ io.on('connection', (socket) => {
         }
         console.log("Dice rolled:", value);
         io.to("lobby").emit("roll_dice", value);
+    });
+    socket.on("new_game_data_request", (gameData) => {
+        io.to("lobby").emit("new_game_data", gameData);
     });
     socket.on("disconnect", (reason) => {
         let uid = socketToUid.get(socket);

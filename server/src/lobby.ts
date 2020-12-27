@@ -1,11 +1,13 @@
 import {NUMBER_OF_PLAYER_CARDS} from './card'; 
 
-interface IPlayer {
+export interface IPlayer {
     username: string
     uid: number
 
     characterIndex: number
-    hand: any[] // TODO
+    coins: number
+    hand: number[] // Ids of the cards in the hand
+    field: number[] // Ids of the card in the field
 }
 
 export default class BOILobby {
@@ -27,7 +29,9 @@ export default class BOILobby {
             uid: uid,
             characterIndex: -1,
 
-            hand:[]
+            coins: 3,
+            hand:[],
+            field:[],
         });
 
         this.incrementPlayerCharacter(uid) // Set character to the first available character

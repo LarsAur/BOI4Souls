@@ -1,10 +1,11 @@
-import { IPlayer } from './redux';
+import { IGameData, IPlayer } from './redux';
 
-export enum ActionType{
+export enum ActionType {
     JOIN_LOBBY,
     SET_PLAYERS,
     START_GAME,
     ROLL_DICE,
+    SET_GAME_DATA,
 }
 
 export interface IAction {
@@ -12,22 +13,27 @@ export interface IAction {
     payload: any,
 }
 
-export const joinLobby = (uid:number): IAction => ({
+export const joinLobby = (uid: number): IAction => ({
     type: ActionType.JOIN_LOBBY,
     payload: uid
 });
 
-export const setPlayers = (players: IPlayer[]) :IAction => ({
+export const setPlayers = (players: IPlayer[]): IAction => ({
     type: ActionType.SET_PLAYERS,
     payload: players
 });
 
-export const startGame = ():IAction => ({
+export const startGame = (gameData: IGameData): IAction => ({
     type: ActionType.START_GAME,
-    payload: null
+    payload: gameData
 });
 
-export const rollDice = (value:number):IAction => ({
+export const rollDice = (value: number): IAction => ({
     type: ActionType.ROLL_DICE,
     payload: value
 })
+
+export const setGameData = (gameData: IGameData): IAction => ({
+    type: ActionType.SET_GAME_DATA,
+    payload: gameData
+});

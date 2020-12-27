@@ -1,0 +1,19 @@
+.card{
+    height: fit-content;
+    width: 60px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.card img{
+    width: 150px;
+}
+
+.card:hover{
+    transform: scale(1.3);
+    z-index: 1;
+}
+
+.tilted{
+    transform: rotate(90deg);
+}
