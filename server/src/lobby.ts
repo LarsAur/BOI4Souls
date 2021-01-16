@@ -1,14 +1,5 @@
-import {NUMBER_OF_PLAYER_CARDS} from './card'; 
-
-export interface IPlayer {
-    username: string
-    uid: number
-
-    characterIndex: number
-    coins: number
-    hand: number[] // Ids of the cards in the hand
-    field: number[] // Ids of the card in the field
-}
+import { NUMBER_OF_PLAYER_CARDS } from './card';
+import { IPlayer } from '../../client/src/utils/interfaces';
 
 export default class BOILobby {
 
@@ -30,8 +21,8 @@ export default class BOILobby {
             characterIndex: -1,
 
             coins: 3,
-            hand:[],
-            field:[],
+            hand: [],
+            field: [],
         });
 
         this.incrementPlayerCharacter(uid) // Set character to the first available character
@@ -41,34 +32,34 @@ export default class BOILobby {
         return uid;
     }
 
-    removePlayer(uid: number){
-        this.players = this.players.filter((player:IPlayer) => player.uid != uid);
+    removePlayer(uid: number) {
+        this.players = this.players.filter((player: IPlayer) => player.uid != uid);
     }
 
-    getPlayer(uid: number): IPlayer{
-        return this.players.find((player:IPlayer) => player.uid == uid)
+    getPlayer(uid: number): IPlayer {
+        return this.players.find((player: IPlayer) => player.uid == uid)
     }
 
-    getPlayers(){
+    getPlayers() {
         return this.players
     }
 
-    incrementPlayerCharacter(uid:number){
+    incrementPlayerCharacter(uid: number) {
         let player = this.getPlayer(uid);
-        if(!player) return;
+        if (!player) return;
         player.characterIndex = (player.characterIndex + 1) % NUMBER_OF_PLAYER_CARDS;
         // Loop until there is not other player with the character index
-        while(this.players.find((_player:IPlayer) => _player.characterIndex == player.characterIndex && _player.uid != player.uid)){
+        while (this.players.find((_player: IPlayer) => _player.characterIndex == player.characterIndex && _player.uid != player.uid)) {
             player.characterIndex = (player.characterIndex + 1) % NUMBER_OF_PLAYER_CARDS;
         }
     }
 
-    decrementPlayerCharacter(uid:number){
+    decrementPlayerCharacter(uid: number) {
         let player = this.getPlayer(uid);
-        if(!player) return;
+        if (!player) return;
         player.characterIndex = (player.characterIndex - 1 + NUMBER_OF_PLAYER_CARDS) % NUMBER_OF_PLAYER_CARDS;
         // Loop until there is not other player with the character index
-        while(this.players.find((_player:IPlayer) => _player.characterIndex == player.characterIndex && _player.uid != player.uid)){
+        while (this.players.find((_player: IPlayer) => _player.characterIndex == player.characterIndex && _player.uid != player.uid)) {
             player.characterIndex = (player.characterIndex - 1 + NUMBER_OF_PLAYER_CARDS) % NUMBER_OF_PLAYER_CARDS;
         }
     }

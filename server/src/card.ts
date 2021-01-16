@@ -19,16 +19,10 @@ export const getEternalCardIdFromCharacterId = (id: number): number => {
 
 export class Card {
     cardId: number
-    turned: boolean
 
     // Id corresponds to the index in the cards list
     constructor(id: number) {
         this.cardId = id;
-        this.turned = false;
-    }
-
-    flip() {
-        this.turned = !this.turned
     }
 }
 

@@ -1,4 +1,4 @@
-import { IGameData, IPlayer } from './redux';
+import { IGameData, IPlayer } from './interfaces';
 
 export enum ActionType {
     JOIN_LOBBY,

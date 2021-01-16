@@ -1,7 +1,6 @@
 .numberDisplay{
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
+    width: min(10vh, 10vw);
+    line-height: min(10vh, 10vw);
 
     border-color: rgb(99, 0, 0);
     border-width: 3px;
@@ -17,4 +16,11 @@
 
     margin: auto;
     margin-bottom: 10px;
+    user-select: none;
+}
+
+.buttonContainer{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }

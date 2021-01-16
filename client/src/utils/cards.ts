@@ -1,5 +1,12 @@
 const BASE_IMAGE_URL = "https://pop-life.com/foursouls/data/cards/"
-export const NUMBER_OF_PLAYER_CARDS = 10; // 11 with eden
+
+export const NUMBER_OF_PLAYER_CARDS = 10;
+export const NUMBER_OF_STARTING_CARDS = 10;
+export const NUMBER_OF_BONUS_SOUL_CARDS = 3;
+export const NUMBER_OF_TREASURE_CARDS = 105;
+export const NUMBER_OF_LOOT_CARDS = 103;
+export const NUMBER_OF_MONSTER_CARDS = 107;
+
 const cardImageUrl:string[] = [
     // Player cards
     "001Isaac(1).png",
@@ -357,6 +364,26 @@ export const getCardURL = (cardId: number):string => {
     return BASE_IMAGE_URL + cardImageUrl[cardId];
 }
 
-export const lootCardBackURL = "https://pop-life.com/foursouls/images/instructions/image4.png"
-export const monsterCardBackURL = "https://pop-life.com/foursouls/images/instructions/image2.png"
-export const treasureCardBackURL = "https://pop-life.com/foursouls/images/instructions/image3.png"
+export const lootCardBackURL = "https://pop-life.com/foursouls/images/instructions/image4.png";
+export const monsterCardBackURL = "https://pop-life.com/foursouls/images/instructions/image2.png";
+export const treasureCardBackURL = "https://pop-life.com/foursouls/images/instructions/image3.png";
+export const playerCardBackURL = "https://pbs.twimg.com/media/Di6pwY1U0AEaeTB.png"
+
+export const getCardBackURL = (cardId: number):string => {
+    
+    const treasureStart = NUMBER_OF_PLAYER_CARDS + NUMBER_OF_STARTING_CARDS + NUMBER_OF_BONUS_SOUL_CARDS;
+    const lootStart = treasureStart + NUMBER_OF_TREASURE_CARDS;
+    const monsterStart = lootStart + NUMBER_OF_LOOT_CARDS;
+
+    if(treasureStart <= cardId && cardId < lootStart){
+        return treasureCardBackURL;
+    }
+    if(lootStart <= cardId && cardId < monsterStart){
+        return lootCardBackURL;
+    }
+    if(monsterStart <= cardId && cardId < monsterStart + NUMBER_OF_MONSTER_CARDS){
+        return monsterCardBackURL;
+    }
+
+    return playerCardBackURL;
+}

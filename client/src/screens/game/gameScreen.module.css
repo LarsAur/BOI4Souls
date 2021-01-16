@@ -1,4 +1,4 @@
-.container{
+.container {
     height: 96vh;
     width: 96vw;
     padding: 2vh 2vw 2vh 2vw;
@@ -8,84 +8,160 @@
     background-repeat: repeat-y;
     align-items: center;
     justify-items: center;
-
     display: grid;
-    grid-template-columns: 40% 5% 5% 5% 5% 40%;
+    overflow: hidden;
+    grid-template-columns: 10% 20% 10% 10% 10% 10% 20% 10%;
     grid-template-rows: 20% 20% 20% 20% 20%;
-    grid-template-areas: 
-        "p1h p1h p1h p2h p2h p2h"
-        "p1f p1f p1f p2f p2f p2f"
-        "tc lc lc dice dice mc"
-        "p3f p3f p3f p4f p4f p4f"
-        "p3h p3h p3h p4h p4h p4h"
-
+    grid-template-areas: "p1h p1h p1h p1h p2h p2h p2h p2h" "p1f p1f p1f p1f p2f p2f p2f p2f" "tc tcf dlp lc dice dmp mcf mc" "p3f p3f p3f p3f p4f p4f p4f p4f" "p3h p3h p3h p3h p4h p4h p4h p4h";
+    user-select: none;
 }
 
-.dice{
+button{
+    background-color: lightgray;
+    border-color: lightgray;
+}
+
+button:focus{
+    outline: 0 !important;
+}
+
+.dice {
     grid-area: dice;
+    margin-top: 10%;
+    width: 100%;
+    height: 90%
 }
 
-.lootCards{
+.discardLootPile {
+    grid-area: dlp;
+    width: 100%;
+    height: 100%;
+}
+
+.discardLootPile:hover {
+    background-color: #0000000d;
+}
+
+.lootCards {
     grid-area: lc;
+    width: 100%;
+    height: 100%;
 }
 
-.treasureCards{
+.treasureCards {
     grid-area: tc;
+    width: 100%;
+    height: 100%;
 }
 
-.monsterCards{
+.treasureField {
+    grid-area: tcf;
+    width: 100%;
+    height: 100%;
+}
+
+.treasureField:hover {
+    background-color: #0000000d;
+}
+
+.treasureField>div>div, .monsterField>div>div, .player1Field>div>div, .player2Field>div>div, .player3Field>div>div, .player4Field>div>div, .player1Hand>div>div, .player2Hand>div>div, .player3Hand>div>div, .player4Hand>div>div{
+    width: 60px;
+}
+
+.monsterCards {
     grid-area: mc;
-}
-
-.player1Hand, .player2Hand, .player3Hand, .player4Hand{
-
     width: 100%;
     height: 100%;
 }
 
-.player1Hand:hover, .player2Hand:hover, .player3Hand:hover, .player4Hand:hover{
-    background-color: #0000000d;
-}
-
-.player1Field, .player2Field, .player3Field, .player4Field{
+.monsterField {
+    grid-area: mcf;
     width: 100%;
     height: 100%;
 }
 
-.player1Field:hover, .player2Field:hover, .player3Field:hover, .player4Field:hover{
+.monsterField:hover {
     background-color: #0000000d;
 }
 
-.player1Hand{
+.discardMonsterPile {
+    grid-area: dmp;
+    width: 100%;
+    height: 100%;
+}
+
+.discardMonsterPile:hover {
+    background-color: #0000000d;
+}
+
+
+.discardLootPile>div, .discardMonsterPile>div, .lootCards>div, .treasureCards>div, .monsterCards>div, .monsterField>div, .treasureField>div {
+    width: 100%;
+    height: 100%;
+}
+
+.player1Hand, .player2Hand, .player3Hand, .player4Hand {
+    width: 100%;
+    height: 100%;
+}
+
+.player1Hand:hover, .player2Hand:hover, .player3Hand:hover, .player4Hand:hover {
+    background-color: #0000000d;
+}
+
+.player1Field, .player2Field, .player3Field, .player4Field {
+    width: 100%;
+    height: 100%;
+}
+
+.player1Field:hover, .player2Field:hover, .player3Field:hover, .player4Field:hover {
+    background-color: #0000000d;
+}
+
+.player1Hand {
     grid-area: p1h;
-
 }
 
-.player2Hand{
+.player2Hand {
     grid-area: p2h;
-    
 }
 
-.player3Hand{
+.player3Hand {
     grid-area: p3h;
 }
 
-.player4Hand{
+.player4Hand {
     grid-area: p4h;
 }
 
-.player1Field{
+.player1Field {
     grid-area: p1f;
 }
 
-.player2Field{
+.player2Field {
     grid-area: p2f;
 }
 
-.player3Field{
+.player3Field {
     grid-area: p3f;
 }
 
-.player4Field{
+.player4Field {
     grid-area: p4f;
+}
+
+.playerInfo{
+    background-color: #292933;
+    border-radius: 2px;
+    width: 90%;
+    padding: 6px;
+    color: aliceblue;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    letter-spacing: 0.1em;
+}
+
+.playerInfo > div > img{
+    height: 15px;
 }

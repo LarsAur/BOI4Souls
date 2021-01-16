@@ -3,12 +3,13 @@ import http from 'http'
 import fs from 'fs';
 
 import BOILobby from './lobby';
-import BOIGame, { IGameData } from './game';
+import BOIGame from './game';
+import { IMove, IGameData, ICardTiltRequest } from '../../client/src/utils/interfaces';
 
 const PORT = 80;
 
 let lobby = new BOILobby();
-let game;
+let game: BOIGame;
 let socketToUid = new Map<Socket, number>();
 
 // Setup http server and the endpoints
@@ -76,24 +77,68 @@ io.on('connection', (socket: Socket) => {
 
         game = new BOIGame(lobby.players);
 
-        console.log(game.getGameData())
-
         io.to("lobby").emit("start_game", game.getGameData());
-    })
+    });
 
     socket.on("roll_dice_request", () => {
-        let value = Math.ceil(Math.random()*6);
-        while(value === 0){
-            value = Math.ceil(Math.random()*6);
+        let value = Math.ceil(Math.random() * 6);
+        while (value === 0) {
+            value = Math.ceil(Math.random() * 6);
         }
-        
+
         console.log("Dice rolled:", value);
         io.to("lobby").emit("roll_dice", value);
+    });
+
+    
+    socket.on("move_request", (moveRequest: IMove) => {
+        console.log(moveRequest)
+
+        if (!game.isMoveEffective(moveRequest)) {
+            console.log("Ineffective move")
+            return; // Do nothing if the move has no effect on the gameData
+        }
+
+        if (game.isMoveValid(moveRequest)) {
+            // Reset card tilt if the card is moved to another droppable
+            if (moveRequest.sourceType != moveRequest.destinationType || moveRequest.sourceTypeIndex != moveRequest.destinationTypeIndex) {
+                game.resetCard(moveRequest.cardId);
+            }
+            game.performMove(moveRequest);
+            console.log("sending update...")
+            updateLobbyMembers();
+        } else {
+            console.log("invalid move")
+            socket.emit("invalid_move");
+        }
+    });
+
+    socket.on("tilt_card_request", (tiltRequest: ICardTiltRequest) => {
+        game.setCardTilt(tiltRequest.value, tiltRequest.cardId);
+        updateLobbyMembers();
     })
 
-    socket.on("new_game_data_request", (gameData:IGameData) => {
-        io.to("lobby").emit("new_game_data", gameData)
-    })
+    socket.on("increment_cent_request", () => {
+        let uid = socketToUid.get(socket);
+        game.incrementCentCounter(uid);
+        updateLobbyMembers();
+    });
+
+    socket.on("decrement_cent_request", () => {
+        let uid = socketToUid.get(socket);
+        game.decrementCentCounter(uid);
+        updateLobbyMembers();
+    });
+
+    socket.on("increment_card_request", (cardId: number) => {
+        game.incrementCounter(cardId);
+        updateLobbyMembers();
+    });
+
+    socket.on("decrement_card_request", (cardId: number) => {
+        game.decrementCounter(cardId);
+        updateLobbyMembers();
+    });
 
     socket.on("disconnect", (reason) => {
         let uid = socketToUid.get(socket);
@@ -104,7 +149,11 @@ io.on('connection', (socket: Socket) => {
             io.to("lobby").emit("update_lobby", lobby.getPlayers());
         }
     });
-})
+});
+
+function updateLobbyMembers(): void {
+    io.to("lobby").emit("new_game_data", game.getGameData());
+}
 
 
 // Start http server on the port

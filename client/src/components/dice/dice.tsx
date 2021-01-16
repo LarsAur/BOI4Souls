@@ -6,7 +6,7 @@ import Button from '../button/button'
 
 import classes from './dice.module.css'
 
-class Dice extends React.Component{
+class Dice extends React.Component {
 
     render() {
         return (
@@ -14,7 +14,9 @@ class Dice extends React.Component{
                 <div className={classes.numberDisplay}>
                     {store.getState().diceValue}
                 </div>
-                <Button clicked={() => Network.rollDice()}>Roll</Button>
+                <div className={classes.buttonContainer}>
+                    <Button clicked={() => Network.rollDice()}>Roll</Button>
+                </div>
             </div>
         );
     }

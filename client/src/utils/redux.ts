@@ -1,29 +1,11 @@
 import { createStore } from 'redux';
 import { ActionType, IAction } from './actions';
+import { IGameData, IPlayer } from './interfaces';
 
 export enum NavState {
     LOGIN,
     LOBBY,
     GAME,
-}
-
-export interface IPlayer {
-    username: string
-    uid: number
-
-    characterIndex: number
-    coins: number
-    hand: number[] // Ids of the cards in the hand
-    field: number[] // Ids of the card in the field
-}
-
-export interface IGameData{
-    players: IPlayer[];
-
-    monsterDeck : number[];
-    lootDeck : number[];
-    treasureDeck: number[];
-    bonusSoulsDeck: number[];
 }
 
 export interface IState {

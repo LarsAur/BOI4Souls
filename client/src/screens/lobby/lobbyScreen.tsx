@@ -1,8 +1,11 @@
 import React from 'react';
 import PlayerDisplay from '../../components/playerDisplay/playerDisplay';
-import { IState, IPlayer, store } from '../../utils/redux';
+import { IState, store } from '../../utils/redux';
 import { connect } from 'react-redux';
+import { getCardURL, NUMBER_OF_PLAYER_CARDS, NUMBER_OF_STARTING_CARDS } from '../../utils/cards';
 import Button from '../../components/button/button';
+
+import { IPlayer } from '../../utils/interfaces';
 
 import classes from './lobbyScreen.module.css';
 import Network from '../../utils/network';
@@ -16,6 +19,10 @@ interface ILobbyProps {
 }
 
 class LobbyScreen extends React.Component<ILobbyProps, ILobbyState>{
+
+    componentDidMount(){
+        this.preloadCharacterImages();
+    }
 
     render() {
         return (
@@ -45,6 +52,13 @@ class LobbyScreen extends React.Component<ILobbyProps, ILobbyState>{
     getEmpties = (): JSX.Element[] => {
         let arr = Array(4 - store.getState().players.length).fill(0);
         return arr.map((n: number, index: number) => <div key={index + store.getState().players.length} className={classes.empty}></div>)
+    }
+
+    preloadCharacterImages(): void {
+        for (let i:number = 0; i < NUMBER_OF_PLAYER_CARDS + NUMBER_OF_STARTING_CARDS; i++){
+            let image = new Image();
+            image.src = getCardURL(i);
+        }
     }
 
 }

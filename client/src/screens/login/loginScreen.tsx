@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '../../components/button/button';
 import Network from '../../utils/network';
 
-import classes from './loginScreen.module.css'
+import classes from './loginScreen.module.css';
 
 interface ILoginProps{
 

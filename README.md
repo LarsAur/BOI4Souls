@@ -3,6 +3,8 @@
 # TODO
 
 - Coin counter
-- Counter on cards
 - Request to see a players cards
-- Bin pile'
+- Preload images in lobby
+- Disconnect alert
+✅ Counter on cards
+✅ Bin pile
