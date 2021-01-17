@@ -2,9 +2,10 @@
 
 # TODO
 
-- Coin counter
+✅ Coin counter
 - Request to see a players cards
-- Preload images in lobby
-- Disconnect alert
-✅ Counter on cards
-✅ Bin pile
+- Modal component
+✅ Preload images in lobby
+- Disconnect alert 
+✅ Counter on cards 
+✅ Bin pile 

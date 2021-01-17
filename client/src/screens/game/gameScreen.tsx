@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Dice from '../../components/dice/dice';
-import { IState, store } from '../../utils/redux';
-import { IPlayer, IGameData, DroppableType } from '../../utils/interfaces';
-
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+
+import { IPlayer, IGameData, DroppableType } from '../../utils/interfaces';
+import { IState, store } from '../../utils/redux';
+
+import Dice from '../../components/dice/dice';
 import Card from '../../components/card/card';
+import Modal from '../../components/modal/modal';
 
 import classes from './gameScreen.module.css';
 import Network from '../../utils/network';
@@ -108,6 +110,8 @@ class GameScreen extends React.Component {
                     {this.getMonsterField()}
                     {this.getMonsterDiscardPile()}
                     {this.getDiscardLootPile()}
+
+                    <Modal display={true} handleClose={() => console.log("close")}></Modal>
                 </div>
             </DragDropContext>
         )
