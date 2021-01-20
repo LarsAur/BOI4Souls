@@ -15,6 +15,20 @@ export interface IGameData {
 
     tiltLookup: boolean[];      // indexed by the card id
     counterLookup: number[];    // indexed by the card id
+
+    deckLockUid: number | null; // uid of the player who has locked the deck
+
+    // Can person 1 see person 2's hand
+    handVisibility: [number, [number, boolean][]][]  //(Player who sees, the player who can be seen) 
+    handAccessibility: [number, boolean][] // Can other players pull cards from a players hand
+}
+
+export const handAccessibilityToMap = (handAccessability: [number, boolean][]):Map<number, boolean> => {
+    return new Map(handAccessability)
+}
+
+export const handVisibilityToMap = (handVisibility: [number, [number, boolean][]][]): Map<number, Map<number, boolean>> => {
+    return new Map(handVisibility.map((e:[number, [number, boolean][]]) => [e[0], new Map(e[1])]))
 }
 
 export interface IPlayer {
@@ -25,6 +39,7 @@ export interface IPlayer {
     coins: number
     hand: number[] // Ids of the cards in the hand
     field: number[] // Ids of the card in the field
+
 }
 
 export interface IMove {
@@ -42,6 +57,15 @@ export interface IMove {
 export interface ICardTiltRequest {
     cardId: number,
     value: boolean,
+}
+
+export interface IHandVisabilityRequest {
+    seerUid: number,
+    value: boolean,
+}
+
+export interface IHandAccessibilityRequest {
+    value: boolean
 }
 
 export enum DroppableType {

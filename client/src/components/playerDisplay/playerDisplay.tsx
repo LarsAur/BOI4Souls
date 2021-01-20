@@ -21,7 +21,9 @@ export default class PlayerDisplay extends React.Component<IPlayerDisplayProps, 
     render() {
         return (
             <div className={classes.container}>
-                {this.props.username}
+                <div>
+                    {this.props.username}
+                </div>
                 <img className={classes.playerCard} src={getCardURL(this.props.characterIndex)} alt="" />
                 <img className={classes.playerCard} src={getCardURL(this.props.characterIndex + NUMBER_OF_PLAYER_CARDS)} alt="" />
                 {this.getControls()}

@@ -20,6 +20,9 @@ export default class BOIGame {
     tiltLookup: boolean[];
     counterLookup: number[];
 
+    handVisability: Map<number, Map<number, boolean>>
+    handAccessibility: Map<number, boolean>
+
     constructor(players: IPlayer[]) {
         this.players = players;
 
@@ -38,11 +41,23 @@ export default class BOIGame {
         this.tiltLookup = new Array(NUMBER_OF_CARDS).fill(false);
         this.counterLookup = new Array(NUMBER_OF_CARDS).fill(0);
 
+        this.handVisability = new Map<number, Map<number, boolean>>();
+        this.handAccessibility = new Map<number, boolean>();
+
         this.players.forEach((player: IPlayer) => {
             player.coins = 3;
             player.hand.push(...this.lootDeck.splice(0, 3));
             player.field.push(player.characterIndex)
             player.field.push(getEternalCardIdFromCharacterId(player.characterIndex));
+
+            this.handVisability.set(player.uid, new Map<number, boolean>())
+            this.handAccessibility.set(player.uid, false);
+
+            this.players.filter((_player: IPlayer) => _player.uid !== player.uid)
+            .forEach((_player:IPlayer) => this.handVisability.get(player.uid).set(_player.uid, false));
+            this.handVisability.get(player.uid).set(player.uid, true);  // Every player can see their own hand
+
+
         })
     }
 
@@ -169,6 +184,14 @@ export default class BOIGame {
         }
     }
 
+    setHandVisability(seerUid:number, seenUid:number, val: boolean){
+        this.handVisability.get(seerUid).set(seenUid, val);
+    }
+
+    setHandAccessiblity(uid:number, val:boolean){
+        this.handAccessibility.set(uid, val);
+    }
+
     getGameData(): IGameData {
         return {
             players: this.players,
@@ -187,6 +210,11 @@ export default class BOIGame {
             discardLootPile: this.discardLootPile,
             discardMonsterPile: this.discardMonsterPile,
             discardTreasurePile: this.discardTreasurePile,
+
+            deckLockUid: -1,    // TODO
+
+            handVisibility: Array.from(this.handVisability).map((m: [number, Map<number, boolean>]) => [m[0], Array.from(m[1])]),
+            handAccessibility: Array.from(this.handAccessibility),
         }
     }
 

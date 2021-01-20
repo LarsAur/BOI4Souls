@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { IState } from './redux';
 import { IAction, joinLobby, setPlayers, startGame, rollDice, setGameData } from './actions';
 import { Store } from 'redux';
-import { IPlayer, IGameData, IMove, ICardTiltRequest, DroppableType } from './interfaces';
+import { IPlayer, IGameData, IMove, ICardTiltRequest, DroppableType, IHandVisabilityRequest, IHandAccessibilityRequest } from './interfaces';
 import AudioManager from './audioManager';
 
 const ioAddress = window.origin === "http://localhost:3000" ? "ws://localhost:80" : window.origin;
@@ -78,6 +78,22 @@ export default class Network {
 
     static rollDice() {
         Network.socket.emit("roll_dice_request");
+    }
+
+    // Set wether the player with the uid can see your hand or not
+    static requestSetHandVisability(val: boolean, uid: number){
+        let request: IHandVisabilityRequest = {
+            seerUid: uid,
+            value: val,
+        };
+        Network.socket.emit("request_set_hand_visability", request);
+    }
+
+    static requestSetHandAccessibility(val: boolean){
+        let request: IHandAccessibilityRequest = {
+            value: val
+        }
+        Network.socket.emit("request_set_hand_accessibility", request);
     }
 
     static sendMoveRequest(srcType: DroppableType, srcIndex: number, srcInnerIndex: number, destDropType: DroppableType, destIndex: number, destInnerIndex: number, cardId: number) {

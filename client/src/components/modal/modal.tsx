@@ -4,7 +4,8 @@ import Button from '../button/button';
 import classes from './modal.module.css';
 
 interface IModalProps {
-    handleClose: () => void
+    handleApply: () => void
+    handleCancel: () => void
     display: boolean
     title?: string
 }
@@ -16,7 +17,10 @@ export default class Modal extends React.Component<IModalProps>{
                 <div className={classes.modalContent}>
                     {this.props.children}
 
-                    <span className={classes.controlBar}><Button clicked={this.props.handleClose}>Apply</Button></span>
+                    <span className={classes.controlBar}>
+                        <Button clicked={this.props.handleCancel}>Cancel</Button>
+                        <Button clicked={this.props.handleApply}>Apply</Button>
+                    </span>
                 </div>
             </div>
         );

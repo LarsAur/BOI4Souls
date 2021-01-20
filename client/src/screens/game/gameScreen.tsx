@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-import { IPlayer, IGameData, DroppableType } from '../../utils/interfaces';
+import { IPlayer, IGameData, DroppableType, handAccessibilityToMap, handVisibilityToMap } from '../../utils/interfaces';
 import { IState, store } from '../../utils/redux';
 
 import Dice from '../../components/dice/dice';
@@ -111,7 +111,7 @@ class GameScreen extends React.Component {
                     {this.getMonsterDiscardPile()}
                     {this.getDiscardLootPile()}
 
-                    <Modal display={true} handleClose={() => console.log("close")}></Modal>
+                    {/*<Modal display={true} handleApply={() => console.log("close")} handleCancel={()=> console.log("cancel")}></Modal>*/}
                 </div>
             </DragDropContext>
         )
@@ -334,10 +334,14 @@ class GameScreen extends React.Component {
     }
 
     getHandAreas(): JSX.Element[] {
+
+        const handVisibility = handVisibilityToMap(store.getState().gameData.handVisibility);
+        const handAccessibility = handAccessibilityToMap(store.getState().gameData.handAccessibility);
+
         return store.getState().players.map((player: IPlayer, index: number) => (
             <div key={"handkey" + index} className={classes["player" + (index + 1) + "Hand"]}>
                 {index < 2 ? this.getPlayerBar(player) : null}
-                <Droppable droppableId={index + "-hand"} direction={"horizontal"} isDropDisabled={player.uid !== store.getState().uid}>
+                <Droppable droppableId={index + "-hand"} direction={"horizontal"} isDropDisabled={(player.uid !== store.getState().uid && !handAccessibility.get(player.uid))}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -345,13 +349,13 @@ class GameScreen extends React.Component {
                             {...provided.droppableProps}
                         >
                             {player.hand.map((id: number, index: number) => (
-                                <Draggable key={id} draggableId={id + "-card"} index={index} isDragDisabled={player.uid !== store.getState().uid}>
+                                <Draggable key={id} draggableId={id + "-card"} index={index} isDragDisabled={(player.uid !== store.getState().uid && !handAccessibility.get(player.uid))}>
                                     {(provided, snapshot) => (
                                         <div ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                         >
-                                            <Card cardId={id} inOwnedField={false} hidden={store.getState().uid !== player.uid} />
+                                            <Card cardId={id} inOwnedField={false} hidden={!handVisibility.get(store.getState().uid)?.get(player.uid)} />
                                         </div>
                                     )}
                                 </Draggable>
@@ -396,20 +400,40 @@ class GameScreen extends React.Component {
     }
 
     getPlayerBar(player: IPlayer) {
+
+        const handAccessibility: Map<number, boolean> = handAccessibilityToMap(store.getState().gameData.handAccessibility);
+        const handVisibility: Map<number, Map<number, boolean>> = handVisibilityToMap(store.getState().gameData.handVisibility);
+
+        // Current Player
+        if (player.uid === store.getState().uid) {
+            return (
+                <div className={classes.playerInfo}>
+                    <span>{player.username}</span>
+                    <div style={{ display: "flex", justifyContent: "space-between", width: 190 }}>
+                        <button onClick={() => Network.requestSetHandAccessibility(!handAccessibility.get(store.getState().uid))}>
+                            {handAccessibility.get(store.getState().uid) ? "Close Hand" : "Open Hand"}
+                        </button>
+                        <button onClick={Network.requestCentDecrement}><b>-</b></button>
+                        <img src="https://www.flaticon.com/svg/static/icons/svg/1757/1757191.svg" alt="Cent"></img> : {player.coins}
+                        <button onClick={Network.requestCentIncrement}><b>+</b></button>
+                    </div>
+                </div>
+            )
+        }
+
+        // Other players
+
+        let currentVisability: boolean = handVisibility.get(player.uid)?.get(store.getState().uid) as boolean
+
         return (
             <div className={classes.playerInfo}>
                 <span>{player.username}</span>
-                {player.uid === store.getState().uid ? 
-                <div style={{ display: "flex", justifyContent: "space-between", width: 100 }}>
-                    <button onClick={Network.requestCentDecrement}><b>-</b></button>
-                    <img src="https://www.flaticon.com/svg/static/icons/svg/1757/1757191.svg" alt="Cent"></img> : {player.coins}
-                    <button onClick={Network.requestCentIncrement}><b>+</b></button>
-                </div>
-                :
-                <div style={{ display: "flex", justifyContent: "space-between", width: 45 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", width: 160 }}>
+                    <button onClick={() => Network.requestSetHandVisability(!currentVisability, player.uid)}>
+                        {currentVisability ? "Hide Hand" : "Show Hand"}
+                    </button>
                     <img src="https://www.flaticon.com/svg/static/icons/svg/1757/1757191.svg" alt="Cent"></img> : {player.coins}
                 </div>
-                }
             </div>
         )
     }

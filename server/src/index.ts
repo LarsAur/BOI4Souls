@@ -4,7 +4,8 @@ import fs from 'fs';
 
 import BOILobby from './lobby';
 import BOIGame from './game';
-import { IMove, IGameData, ICardTiltRequest } from '../../client/src/utils/interfaces';
+import { IMove, IGameData, ICardTiltRequest, IHandVisabilityRequest , IHandAccessibilityRequest} from '../../client/src/utils/interfaces';
+import { request } from 'https';
 
 const PORT = 80;
 
@@ -137,6 +138,18 @@ io.on('connection', (socket: Socket) => {
 
     socket.on("decrement_card_request", (cardId: number) => {
         game.decrementCounter(cardId);
+        updateLobbyMembers();
+    });
+
+    socket.on("request_set_hand_visability", (request: IHandVisabilityRequest) => {
+        const seenUid: number = socketToUid.get(socket);
+        game.setHandVisability(request.seerUid, seenUid, request.value);
+        updateLobbyMembers();
+    });
+
+    socket.on("request_set_hand_accessibility", (request: IHandAccessibilityRequest) => {
+        const uid: number = socketToUid.get(socket);
+        game.setHandAccessiblity(uid, request.value);
         updateLobbyMembers();
     });
 
