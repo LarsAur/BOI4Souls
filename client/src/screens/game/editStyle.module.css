@@ -1,0 +1,53 @@
+.container {
+    height: 72vh;
+    display: grid;
+    grid-template-rows: 25% 25% 25% 25%;
+    grid-template-columns: 60% 10% 10% 10% 10%;
+    grid-template-areas: "field discard discard deck deck" "tmp . . . ." "playerField . bottom bottom ." "playerhand . . . .";
+}
+
+.playerHand {
+    grid-area: playerhand;
+}
+
+.playerField {
+    grid-area: playerField;
+}
+
+.tmp {
+    grid-area: tmp;
+}
+
+.field {
+    grid-area: field;
+}
+
+.discard {
+    text-align: center;
+    grid-area: discard;
+}
+
+.deck {
+    text-align: center;
+    grid-area: deck;
+}
+
+.bottom {
+    text-align: center;
+    grid-area: bottom;
+}
+
+.playerHand, .playerField, .tmp, .field, .discard, .deck, .bottom{
+    width: 100%;
+    height: 100%;
+}
+
+.playerHand > div, .playerField > div, .tmp > div, .field > div, .discard > div, .deck > div, .bottom > div{
+    width: 100%;
+    height: 100%;
+}
+
+
+.playerHand:hover, .playerField:hover, .tmp:hover, .field:hover, .discard:hover, .deck:hover, .bottom:hover{
+    background-color: #0000000d;
+}

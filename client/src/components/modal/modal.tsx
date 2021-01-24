@@ -6,14 +6,13 @@ import classes from './modal.module.css';
 interface IModalProps {
     handleApply: () => void
     handleCancel: () => void
-    display: boolean
     title?: string
 }
 
 export default class Modal extends React.Component<IModalProps>{
     render(): JSX.Element {
         return (
-            <div className={classes.modal + (this.props.display ? "" : " noDisplay")}>
+            <div className={classes.modal}>
                 <div className={classes.modalContent}>
                     {this.props.children}
 

@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { IState } from './redux';
 import { IAction, joinLobby, setPlayers, startGame, rollDice, setGameData } from './actions';
 import { Store } from 'redux';
-import { IPlayer, IGameData, IMove, ICardTiltRequest, DroppableType, IHandVisabilityRequest, IHandAccessibilityRequest } from './interfaces';
+import { IPlayer, IGameData, IMove, ICardTiltRequest, DroppableType, IHandVisabilityRequest, IHandAccessibilityRequest, IGameEdit } from './interfaces';
 import AudioManager from './audioManager';
 
 const ioAddress = window.origin === "http://localhost:3000" ? "ws://localhost:80" : window.origin;
@@ -118,5 +118,21 @@ export default class Network {
             value: value
         }
         Network.socket.emit("tilt_card_request", req);
+    }
+
+    static sendEditRequest(){
+        Network.socket.emit("request_edit_deck");
+    }
+
+    static relieveEdit(){
+        Network.socket.emit("relieve_edit_deck")
+    }
+
+    static publishEdit(edit: IGameEdit){
+        Network.socket.emit("publish_gamedata_edit", edit);
+    }
+
+    static requestGameDataRefresh(){
+        Network.socket.emit("request_gamedata_refresh");
     }
 }

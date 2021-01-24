@@ -16,7 +16,7 @@ export interface IGameData {
     tiltLookup: boolean[];      // indexed by the card id
     counterLookup: number[];    // indexed by the card id
 
-    deckLockUid: number | null; // uid of the player who has locked the deck
+    deckEditUid: number | null; // uid of the player who has locked the deck
 
     // Can person 1 see person 2's hand
     handVisibility: [number, [number, boolean][]][]  //(Player who sees, the player who can be seen) 
@@ -39,7 +39,6 @@ export interface IPlayer {
     coins: number
     hand: number[] // Ids of the cards in the hand
     field: number[] // Ids of the card in the field
-
 }
 
 export interface IMove {
@@ -66,6 +65,22 @@ export interface IHandVisabilityRequest {
 
 export interface IHandAccessibilityRequest {
     value: boolean
+}
+
+export interface IGameEdit {
+    uid: number,
+    playerHand: number[],
+    playerField: number[],
+
+    lootDeck: number[],
+    lootDiscard: number[],
+    treasureDeck: number[],
+    treasureDiscard: number[],
+    treasureField: number[],
+    monsterDeck: number[],
+    monsterDiscard: number[],
+    monsterField: number[],
+    bonusSouls: number[],
 }
 
 export enum DroppableType {

@@ -1,4 +1,5 @@
-import { IPlayer, IGameData, IMove, DroppableType } from '../../client/src/utils/interfaces';
+import { threadId } from 'worker_threads';
+import { IPlayer, IGameData, IMove, DroppableType, IGameEdit } from '../../client/src/utils/interfaces';
 import { getAllBonusCards, getAllMonsterCards, getAllLootCards, getAllTreasureCards, getEternalCardIdFromCharacterId, NUMBER_OF_CARDS } from './card';
 
 export default class BOIGame {
@@ -20,8 +21,9 @@ export default class BOIGame {
     tiltLookup: boolean[];
     counterLookup: number[];
 
-    handVisability: Map<number, Map<number, boolean>>
-    handAccessibility: Map<number, boolean>
+    handVisability: Map<number, Map<number, boolean>>;
+    handAccessibility: Map<number, boolean>;
+    deckEditUid: number | null;
 
     constructor(players: IPlayer[]) {
         this.players = players;
@@ -43,6 +45,7 @@ export default class BOIGame {
 
         this.handVisability = new Map<number, Map<number, boolean>>();
         this.handAccessibility = new Map<number, boolean>();
+        this.deckEditUid = null;
 
         this.players.forEach((player: IPlayer) => {
             player.coins = 3;
@@ -54,7 +57,7 @@ export default class BOIGame {
             this.handAccessibility.set(player.uid, false);
 
             this.players.filter((_player: IPlayer) => _player.uid !== player.uid)
-            .forEach((_player:IPlayer) => this.handVisability.get(player.uid).set(_player.uid, false));
+                .forEach((_player: IPlayer) => this.handVisability.get(player.uid).set(_player.uid, false));
             this.handVisability.get(player.uid).set(player.uid, true);  // Every player can see their own hand
 
 
@@ -62,7 +65,6 @@ export default class BOIGame {
     }
 
     performMove(move: IMove) {
-
         let cardId: number = -1;
         switch (move.sourceType) {
             case DroppableType.Field:
@@ -120,18 +122,18 @@ export default class BOIGame {
                 this.treasureDeck.splice(move.destinationInnerIndex, 0, cardId);
                 break;
             case DroppableType.TreasureField:
-                this.treasureField.splice(move.destinationInnerIndex, 0, cardId);   
+                this.treasureField.splice(move.destinationInnerIndex, 0, cardId);
                 break;
         }
     }
 
-    incrementCentCounter(uid: number): void{
-        this.players.find((player:IPlayer) => player.uid == uid).coins++;
+    incrementCentCounter(uid: number): void {
+        this.players.find((player: IPlayer) => player.uid == uid).coins++;
     }
 
-    decrementCentCounter(uid: number): void{
-        if(this.players.find((player:IPlayer) => player.uid == uid).coins > 0){
-            this.players.find((player:IPlayer) => player.uid == uid).coins--;
+    decrementCentCounter(uid: number): void {
+        if (this.players.find((player: IPlayer) => player.uid == uid).coins > 0) {
+            this.players.find((player: IPlayer) => player.uid == uid).coins--;
         }
     }
 
@@ -140,7 +142,7 @@ export default class BOIGame {
     }
 
     decrementCounter(cardId: number): void {
-        if(this.counterLookup[cardId] > 0){
+        if (this.counterLookup[cardId] > 0) {
             this.counterLookup[cardId]--;
         }
     }
@@ -184,12 +186,32 @@ export default class BOIGame {
         }
     }
 
-    setHandVisability(seerUid:number, seenUid:number, val: boolean){
+    setHandVisability(seerUid: number, seenUid: number, val: boolean) {
         this.handVisability.get(seerUid).set(seenUid, val);
     }
 
-    setHandAccessiblity(uid:number, val:boolean){
+    setHandAccessiblity(uid: number, val: boolean) {
         this.handAccessibility.set(uid, val);
+    }
+
+    performGameEdit(edit: IGameEdit) {
+        const playerIndex: number = this.players.findIndex((player: IPlayer) => player.uid === edit.uid);
+
+        this.players[playerIndex].hand = edit.playerHand;
+        this.players[playerIndex].field = edit.playerField;
+        
+        this.lootDeck = edit.lootDeck;
+        this.discardLootPile = edit.lootDiscard;
+        
+        this.treasureDeck = edit.treasureDeck;
+        this.treasureField = edit.treasureField;
+        this.discardTreasurePile = edit.treasureDiscard;
+        
+        this.monsterDeck = edit.monsterDeck;
+        this.monsterField = edit.monsterField;
+        this.discardMonsterPile = edit.monsterDiscard;
+
+        this.bonusSoulsDeck = edit.bonusSouls;
     }
 
     getGameData(): IGameData {
@@ -211,11 +233,29 @@ export default class BOIGame {
             discardMonsterPile: this.discardMonsterPile,
             discardTreasurePile: this.discardTreasurePile,
 
-            deckLockUid: -1,    // TODO
+            deckEditUid: this.deckEditUid,
 
             handVisibility: Array.from(this.handVisability).map((m: [number, Map<number, boolean>]) => [m[0], Array.from(m[1])]),
             handAccessibility: Array.from(this.handAccessibility),
         }
+    }
+
+    setPlayerEdit(uid: number): boolean {
+        console.log("Setting player edit")
+        if (this.deckEditUid === null) {
+            this.deckEditUid = uid;
+            return true;
+        }
+
+        return false;
+    }
+
+    removePlayerEdit(uid: number) {
+        if (this.deckEditUid == uid) {
+            this.deckEditUid = null;
+            return true;
+        }
+        return false;
     }
 
     static inplaceShuffle(deck: any[]): any[] {

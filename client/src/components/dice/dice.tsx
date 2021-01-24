@@ -2,7 +2,6 @@ import React from 'react';
 import Network from '../../utils/network';
 import { store, IState } from '../../utils/redux';
 import { connect } from 'react-redux';
-import Button from '../button/button'
 
 import classes from './dice.module.css'
 
@@ -11,11 +10,8 @@ class Dice extends React.Component {
     render() {
         return (
             <div>
-                <div className={classes.numberDisplay}>
+                <div className={classes.numberDisplay} onClick={() => Network.rollDice()}>
                     {store.getState().diceValue}
-                </div>
-                <div className={classes.buttonContainer}>
-                    <Button clicked={() => Network.rollDice()}>Roll</Button>
                 </div>
             </div>
         );

@@ -5,7 +5,6 @@ import GameScreen from './screens/game/gameScreen';
 import Network from './utils/network';
 import { connect } from 'react-redux';
 import { IState, NavState, store } from './utils/redux';
-import './index.css'
 
 class App extends React.Component {
 

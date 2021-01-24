@@ -4,8 +4,7 @@ import fs from 'fs';
 
 import BOILobby from './lobby';
 import BOIGame from './game';
-import { IMove, IGameData, ICardTiltRequest, IHandVisabilityRequest , IHandAccessibilityRequest} from '../../client/src/utils/interfaces';
-import { request } from 'https';
+import { IMove, IGameEdit, ICardTiltRequest, IHandVisabilityRequest , IHandAccessibilityRequest} from '../../client/src/utils/interfaces';
 
 const PORT = 80;
 
@@ -152,6 +151,29 @@ io.on('connection', (socket: Socket) => {
         game.setHandAccessiblity(uid, request.value);
         updateLobbyMembers();
     });
+
+    socket.on("request_edit_deck", () => {
+        const uid:number = socketToUid.get(socket);
+        if(game.setPlayerEdit(uid)){
+            updateLobbyMembers();
+        }
+    });
+
+    socket.on("relieve_edit_deck", () => {
+        const uid:number = socketToUid.get(socket);
+        if(game.removePlayerEdit(uid)){
+            updateLobbyMembers();
+        }
+    });
+
+    socket.on("request_gamedata_refresh", () => {
+        socket.emit("new_game_data", game.getGameData());
+    });
+
+    socket.on("publish_gamedata_edit", (edit:IGameEdit) => {
+        game.performGameEdit(edit);
+        updateLobbyMembers();
+    })
 
     socket.on("disconnect", (reason) => {
         let uid = socketToUid.get(socket);

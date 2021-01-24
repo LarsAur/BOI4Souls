@@ -32,6 +32,12 @@ button:focus{
     height: 90%
 }
 
+.editButton {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
 .discardLootPile {
     grid-area: dlp;
     width: 100%;
