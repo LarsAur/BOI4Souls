@@ -1,4 +1,3 @@
-import { threadId } from 'worker_threads';
 import { IPlayer, IGameData, IMove, DroppableType, IGameEdit } from '../../client/src/utils/interfaces';
 import { getAllBonusCards, getAllMonsterCards, getAllLootCards, getAllTreasureCards, getEternalCardIdFromCharacterId, NUMBER_OF_CARDS } from './card';
 

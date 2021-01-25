@@ -5,7 +5,7 @@ import { Store } from 'redux';
 import { IPlayer, IGameData, IMove, ICardTiltRequest, DroppableType, IHandVisabilityRequest, IHandAccessibilityRequest, IGameEdit } from './interfaces';
 import AudioManager from './audioManager';
 
-const ioAddress = window.origin === "http://localhost:3000" ? "ws://localhost:80" : window.origin;
+const ioAddress = window.origin === "http://localhost:3000" ? "ws://localhost:8080" : window.origin;
 
 export default class Network {
 
