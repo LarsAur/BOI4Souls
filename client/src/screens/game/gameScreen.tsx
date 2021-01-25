@@ -261,17 +261,18 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
 
     getMonsterDiscardPile(): JSX.Element {
         let cardId = store.getState().gameData.discardMonsterPile.length > 0 ? store.getState().gameData.discardMonsterPile[0] : -1;
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.discardMonsterPile}>
                 Monster Discard
-                <Droppable droppableId={"1-monsterDiscard"} direction={"horizontal"}>
+                <Droppable droppableId={"1-monsterDiscard"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
                             style={this.getCenterListStyle(snapshot.isDraggingOver)}
                             {...provided.droppableProps}
                         >
-                            {cardId !== -1 ? <Draggable key={cardId} draggableId={cardId + "-card"} index={0}>
+                            {cardId !== -1 ? <Draggable key={cardId} draggableId={cardId + "-card"} index={0} isDragDisabled={disabled}>
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -290,10 +291,11 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
     }
 
     getMonsterField(): JSX.Element {
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.monsterField}>
                 Monsters
-                <Droppable droppableId={1 + "-monsterField"} direction={"horizontal"}>
+                <Droppable droppableId={1 + "-monsterField"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -301,7 +303,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {...provided.droppableProps}
                         >
                             {store.getState().gameData.monsterField.map((id: number, index: number) => (
-                                <Draggable key={id} draggableId={id + "-card"} index={index}>
+                                <Draggable key={id} draggableId={id + "-card"} index={index} isDragDisabled={disabled}>
                                     {(provided, snapshot) => (
                                         <div ref={provided.innerRef}
                                             {...provided.draggableProps}
@@ -322,10 +324,11 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
 
     getMonsterDeckArea() {
         let cardId: number = store.getState().gameData.monsterDeck.length > 0 ? store.getState().gameData.monsterDeck[0] : -1;
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.monsterCards}>
                 MonsterDeck
-                <Droppable droppableId={"1-monsterDeck"} direction={"horizontal"}>
+                <Droppable droppableId={"1-monsterDeck"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -333,7 +336,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {...provided.droppableProps}
                         >
 
-                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0}>
+                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0} isDragDisabled={disabled}>
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -353,10 +356,11 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
     }
 
     getTreasureField(): JSX.Element {
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.treasureField}>
                 Treasures
-                <Droppable droppableId={1 + "-treasureField"} direction={"horizontal"}>
+                <Droppable droppableId={1 + "-treasureField"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -364,7 +368,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {...provided.droppableProps}
                         >
                             {store.getState().gameData.treasureField.map((id: number, index: number) => (
-                                <Draggable key={id} draggableId={id + "-card"} index={index}>
+                                <Draggable key={id} draggableId={id + "-card"} index={index} isDragDisabled={disabled}>
                                     {(provided, snapshot) => (
                                         <div ref={provided.innerRef}
                                             {...provided.draggableProps}
@@ -385,10 +389,11 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
 
     getTreasureDeckArea(): JSX.Element {
         let cardId: number = store.getState().gameData.treasureDeck.length > 0 ? store.getState().gameData.treasureDeck[0] : -1;
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.treasureCards}>
                 Treasure Deck
-                <Droppable droppableId={"1-treasureDeck"} direction={"horizontal"}>
+                <Droppable droppableId={"1-treasureDeck"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -396,7 +401,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {...provided.droppableProps}
                         >
 
-                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0}>
+                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0} isDragDisabled={disabled}>
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -416,17 +421,18 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
 
     getDiscardLootPile(): JSX.Element {
         let cardId = store.getState().gameData.discardLootPile.length > 0 ? store.getState().gameData.discardLootPile[0] : -1;
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.discardLootPile}>
                 Loot Discard
-                <Droppable droppableId={"1-lootDiscard"} direction={"horizontal"}>
+                <Droppable droppableId={"1-lootDiscard"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
                             style={this.getCenterListStyle(snapshot.isDraggingOver)}
                             {...provided.droppableProps}
                         >
-                            {cardId !== -1 ? <Draggable key={cardId} draggableId={cardId + "-card"} index={0}>
+                            {cardId !== -1 ? <Draggable key={cardId} draggableId={cardId + "-card"} index={0} isDragDisabled={disabled}>
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -446,10 +452,11 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
 
     getLootDeckArea(): JSX.Element {
         let cardId: number = store.getState().gameData.lootDeck.length > 0 ? store.getState().gameData.lootDeck[0] : -1;
+        const disabled = store.getState().gameData.deckEditUid !== null;
         return (
             <div className={classes.lootCards}>
                 Loot Deck
-                <Droppable droppableId={"1-lootDeck"} direction={"horizontal"}>
+                <Droppable droppableId={"1-lootDeck"} direction={"horizontal"} isDropDisabled={disabled}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -457,7 +464,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {...provided.droppableProps}
                         >
 
-                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0}>
+                            <Draggable key={cardId} draggableId={cardId + "-card"} index={0} isDragDisabled={disabled}>
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -702,7 +709,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                                         {...provided.droppableProps}
                                     >
                                         {player.field.map((id: number, index: number) => (
-                                            <Draggable key={id} draggableId={id + "-card"} index={index} isDragDisabled={player.uid !== store.getState().uid}>
+                                            <Draggable key={id} draggableId={id + "-card"} index={index}>
                                                 {(provided, snapshot) => (
                                                     <div ref={provided.innerRef}
                                                         {...provided.draggableProps}
