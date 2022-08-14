@@ -6,7 +6,7 @@ import BOILobby from './lobby';
 import BOIGame from './game';
 import { IMove, IGameEdit, ICardTiltRequest, IHandVisabilityRequest , IHandAccessibilityRequest} from '../../client/src/utils/interfaces';
 
-const PORT = 8080;
+const PORT = 80;
 
 let lobby = new BOILobby();
 let game: BOIGame;

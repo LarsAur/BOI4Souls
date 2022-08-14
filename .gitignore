@@ -14,3 +14,5 @@ client/yarn-error.log*
 
 server/node_modules
 server/dist
+
+.eslintcache

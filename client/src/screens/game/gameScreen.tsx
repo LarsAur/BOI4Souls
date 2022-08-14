@@ -563,7 +563,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                             {handAccessibility.get(store.getState().uid) ? "Close Hand" : "Open Hand"}
                         </button>
                         <button onClick={Network.requestCentDecrement}><b>-</b></button>
-                        <img src="https://www.flaticon.com/svg/static/icons/svg/1757/1757191.svg" alt="Cent"></img> : {player.coins}
+                        <img src="https://www.iconpacks.net/icons/1/free-coin-icon-794-thumb.png" alt="Cent"></img> : {player.coins}
                         <button onClick={Network.requestCentIncrement}><b>+</b></button>
                     </div>
                 </div>
@@ -582,7 +582,7 @@ class GameScreen extends React.Component<IGameScreenProps, IGameScreenState> {
                     <button onClick={() => Network.requestSetHandVisability(!currentVisability, player.uid)}>
                         {currentVisability ? "Hide Hand" : "Show Hand"}
                     </button>
-                    <img src="https://www.flaticon.com/svg/static/icons/svg/1757/1757191.svg" alt="Cent"></img> : {player.coins}
+                    <img src="https://www.iconpacks.net/icons/1/free-coin-icon-794-thumb.png" alt="Cent"></img> : {player.coins}
                 </div>
             </div>
         )
